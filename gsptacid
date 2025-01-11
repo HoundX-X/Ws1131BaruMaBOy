@@ -20,7 +20,7 @@
 #		- Shorter timeout to restart crontab etc
 #       - Often used like this:
 #         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
-#         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_USELOCAL_GSNC=../tools/gs-ptacid GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
+#         GS_HOST=127.0.0.1 GS_PORT=4443 GS_DEBUG=1 GS_USELOCAL=1 GS_USELOCAL_GSNC=../tools/gs-netcat GS_NOSTART=1 GS_NOINST=1 ./deploy.sh
 # GS_USELOCAL=1
 #       - Use local binaries (do not download)
 # GS_USELOCAL_GSNC=<path to gs-ptacid binary>
