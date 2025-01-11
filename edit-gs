@@ -1409,7 +1409,7 @@ test_network()
 	local ret
 	unset IS_TESTNETWORK_OK
 
-	# There should be no gs-netcat listening.
+	# There should be no GS-NETCAT listening.
 	# _GSOCKET_SERVER_CHECK_SEC=n makes gs-netcat try the connection.
 	# 1. Exit=0 immediatly if server exists.
 	# 2. Exit=202 after n seconds. Firewalled/DNS?
