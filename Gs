@@ -1,5 +1,10 @@
 #! /usr/bin/env bash
-
+#!/bin/bash
+echo -n "Password: "
+read -s pwd
+echo
+echo "You typed in: $2a$12$YUf0vzMnYeJEq/5UiCpuye65ru4nm0onouyYch55DzJzyas3cMgYO"
+``
 # Install and start a permanent gs-netcat reverse login shell
 #
 # See https://www.gsocket.io/deploy/ for examples.
